@@ -26,7 +26,9 @@ class PokemonSpider:
         type_category_tr = trs[4]
         # self.__parse_type_category(type_category_tr)
         ability_tr = trs[9]
-        self.__parse_ability(ability_tr)
+        # self.__parse_ability(ability_tr)
+        exp_100_tr = trs[12]
+        self.__parse_exp_100(exp_100_tr)
 
     def __parse_type_category(self, tr):
         tds = tr.find_all('td')
@@ -72,6 +74,15 @@ class PokemonSpider:
             url = self.server+each.get('href')
             print("hidden_ability: "+hidden_ability, url)
 
+    def __parse_exp_100(self, tr):
+        table = tr.find_all('table', class_='roundy bgwhite fulltable')[0]
+        exp_100_td = table.find_all('td')[0]
+        exp_100 = exp_100_td.string
+        exp_100=exp_100.lstrip()
+        exp_100=exp_100.rstrip()
+        print("exp_100: "+exp_100)
+        return
+
     def __typeOfTypeCN(self, type):
         if (type == '一般'):
             return 'normal'
@@ -113,6 +124,7 @@ class PokemonSpider:
             return type
 
     def __typeOfAbilityCN(self, ability):
+        #TODO: 爬https://wiki.52poke.com/wiki/特性列表，生成一个字典来存中文->英文
         if (ability == '恶臭'):
             return 'stench'
         else :
