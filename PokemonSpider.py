@@ -16,13 +16,17 @@ class PokemonSpider:
         table = tables[0]
         trs = table.find_all('tr')
 
+        # index = 0
         # for each in trs:
-        #     print("=============================")
+        #     print("=============================: {}".format(index))
         #     print(each)
+        #     index=index+1
 
         image_tr = trs[2]
         type_category_tr = trs[4]
-        self.__parse_type_category(type_category_tr)
+        # self.__parse_type_category(type_category_tr)
+        ability_tr = trs[9]
+        self.__parse_ability(ability_tr)
 
     def __parse_type_category(self, tr):
         tds = tr.find_all('td')
@@ -44,7 +48,30 @@ class PokemonSpider:
         category = category_td.string
         print('===>category: '+category) #TODO 把 category 翻译成英文
 
-        #继续爬特性
+    def __parse_ability(self, tr):
+        table = tr.find_all('table', class_='roundy bgwhite fulltable')[0]
+        tds = table.find_all('td')
+
+        ability_td = tds[0]
+        hidden_ability_td = tds[1]
+
+        ability_as = ability_td.find_all('a')
+        for each in ability_as:
+            ability = each.string
+            ability=ability.lstrip()
+            ability=ability.rstrip()
+            ability=self.__typeOfAbilityCN(ability)
+            url = self.server+each.get('href')
+            print("ability: "+ability, url)
+
+        hidden_ability_as = hidden_ability_td.find_all('a')
+        for each in hidden_ability_as:
+            hidden_ability = each.string
+            hidden_ability=hidden_ability.lstrip()
+            hidden_ability=hidden_ability.rstrip()
+            url = self.server+each.get('href')
+            print("hidden_ability: "+hidden_ability, url)
+
     def __typeOfTypeCN(self, type):
         if (type == '一般'):
             return 'normal'
@@ -84,3 +111,9 @@ class PokemonSpider:
             return 'rock'
         else :
             return type
+
+    def __typeOfAbilityCN(self, ability):
+        if (ability == '恶臭'):
+            return 'stench'
+        else :
+            return ability
