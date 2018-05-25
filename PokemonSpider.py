@@ -30,7 +30,9 @@ class PokemonSpider:
         exp_100_tr = trs[12]
         # self.__parse_exp_100(exp_100_tr)
         height_weight_tr = trs[30]
-        self.__parse_height_weight(height_weight_tr)
+        # self.__parse_height_weight(height_weight_tr)
+        catch_rate_tr = trs[40]
+        self.__parse_catch_rate(catch_rate_tr)
 
     def __parse_type_category(self, tr):
         tds = tr.find_all('td')
@@ -99,6 +101,14 @@ class PokemonSpider:
         weight=weight.rstrip()
         print("height: "+height)
         print("weight: "+weight)
+
+    def __parse_catch_rate(self, tr):
+        table = tr.find_all('table', class_='roundy bgwhite fulltable')[0]
+        td = table.find_all('td')[0]
+        catch_rate = td.contents[0]
+        catch_rate=catch_rate.lstrip()
+        catch_rate=catch_rate.rstrip()
+        print("catch_rate: "+catch_rate)
 
     def __typeOfTypeCN(self, type):
         if (type == '一般'):
