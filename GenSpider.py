@@ -6,9 +6,11 @@ from PokemonSpider import PokemonSpider
 
 if __name__ == '__main__':
 
+    server = 'https://wiki.52poke.com/'
+
     poke_id = "a095_dayanshe"
     poke_url = "https://wiki.52poke.com//wiki/%E5%A4%A7%E5%B2%A9%E8%9B%87"
-    pokeSpider = PokemonSpider(poke_id, poke_url)
+    pokeSpider = PokemonSpider(poke_id, poke_url, server)
     pokeSpider.fetchData()
 
     # if os.path.exists("./PokemonData/Generation.json"):
@@ -30,7 +32,6 @@ if __name__ == '__main__':
     # enJS.write("export default {")
     # jaJS.write("export default {")
     #
-    # server = 'https://wiki.52poke.com/'
     #
     # target = 'https://wiki.52poke.com/wiki/宝可梦列表（按全国图鉴编号）/简单版'
     # req = requests.get(url=target)
