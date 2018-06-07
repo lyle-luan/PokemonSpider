@@ -34,7 +34,9 @@ class PokemonSpider:
         catch_rate_tr = trs[40]
         # self.__parse_catch_rate(catch_rate_tr)
         gender_ratio_tr = trs[45]
-        self.__parse_gender_ratio(gender_ratio_tr)
+        # self.__parse_gender_ratio(gender_ratio_tr)
+        egg_groups_hatch_time_tr = trs[50]
+        self.__parse_egg_groups_hatch_time(egg_groups_hatch_time_tr)
 
     def __parse_type_category(self, tr):
         tds = tr.find_all('td')
@@ -135,6 +137,35 @@ class PokemonSpider:
             female = female[3:]
             print("gender_ratio_male: "+male)
             print("gender_ratio_female: "+female)
+
+    def __parse_egg_groups_hatch_time(self, tr):
+        table = tr.find('table', class_='roundy bgwhite fulltable')
+        tds = table.find_all('td')
+        egg_groups_td = tds[0]
+        hatch_time_td = tds[1]
+        egg_groups_as = egg_groups_td.find_all('a')
+
+        egg_groups = []
+        for each in egg_groups_as:
+            egg_group = each.string
+            egg_groups.append(egg_group)
+
+        last_egg_group = egg_groups[-1]
+        last_egg_group = last_egg_group[:-1]
+        egg_groups[-1] = last_egg_group
+
+        for each in egg_groups:
+            print("egg_group: "+each)
+
+        hatch_time = hatch_time_td.get_text()
+        hatch_time=hatch_time.lstrip()
+        hatch_time=hatch_time.rstrip()
+        hatch_time_detail = hatch_time.split(' ')
+        hatch_time_cycle = hatch_time_detail[0]
+        print("hatch_time_cycle: "+hatch_time_cycle)
+        hatch_time_step_detail = hatch_time_detail[1]
+        hatch_time_step = hatch_time_step_detail[5:-2]
+        print("hatch_time_step: "+hatch_time_step)
 
     def __typeOfTypeCN(self, type):
         if (type == '一般'):
