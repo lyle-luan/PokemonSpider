@@ -36,7 +36,9 @@ class PokemonSpider:
         gender_ratio_tr = trs[45]
         # self.__parse_gender_ratio(gender_ratio_tr)
         egg_groups_hatch_time_tr = trs[50]
-        self.__parse_egg_groups_hatch_time(egg_groups_hatch_time_tr)
+        # self.__parse_egg_groups_hatch_time(egg_groups_hatch_time_tr)
+        ev_yield_tr = trs[53]
+        self.__parse_ev_yield(ev_yield_tr)
 
     def __parse_type_category(self, tr):
         tds = tr.find_all('td')
@@ -166,6 +168,50 @@ class PokemonSpider:
         hatch_time_step_detail = hatch_time_detail[1]
         hatch_time_step = hatch_time_step_detail[5:-2]
         print("hatch_time_step: "+hatch_time_step)
+
+    def __parse_ev_yield(self, tr):
+        table = tr.find('table', class_='roundy bgwhite fulltable')
+        tr = table.find('tr')
+        tds = tr.find_all('td')
+        hp_td = tds[0]
+        attack_td = tds[1]
+        defense_td = tds[2]
+        sp_atk_td = tds[3]
+        sp_dfs_td = tds[4]
+        speed_td = tds[5]
+
+        hp_num = self.__ev_yield_num(hp_td.get_text())
+        attack_num = self.__ev_yield_num(attack_td.get_text())
+        defense_num = self.__ev_yield_num(defense_td.get_text())
+        sp_atk_num = self.__ev_yield_num(sp_atk_td.get_text())
+        sp_dfs_num = self.__ev_yield_num(sp_dfs_td.get_text())
+        speed_num = self.__ev_yield_num(speed_td.get_text())
+
+        if hp_num != "0":
+            print("ev_yield: hp")
+            print("ev_yield_num: "+hp_num)
+        elif attack_num != "0":
+            print("ev_yield: attack")
+            print("ev_yield_num: "+attack_num)
+        elif defense_num != "0":
+            print("ev_yield: defense")
+            print("ev_yield_num: "+defense_num)
+        elif sp_atk_num != "0":
+            print("ev_yield: sp_atk")
+            print("ev_yield_num: "+sp_atk_num)
+        elif sp_dfs_num != "0":
+            print("ev_yield: sp_def")
+            print("ev_yield_num: "+sp_dfs_num)
+        elif speed_num != "0":
+            print("ev_yield: speed")
+            print("ev_yield_num: "+speed_num)
+
+    def __ev_yield_num(self, ev_yield):
+        ev_yield=ev_yield.lstrip()
+        ev_yield=ev_yield.rstrip()
+        ev_yield=ev_yield[-1]
+        return ev_yield
+
 
     def __typeOfTypeCN(self, type):
         if (type == '一般'):
