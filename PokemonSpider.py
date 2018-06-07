@@ -32,7 +32,9 @@ class PokemonSpider:
         height_weight_tr = trs[30]
         # self.__parse_height_weight(height_weight_tr)
         catch_rate_tr = trs[40]
-        self.__parse_catch_rate(catch_rate_tr)
+        # self.__parse_catch_rate(catch_rate_tr)
+        gender_ratio_tr = trs[45]
+        self.__parse_gender_ratio(gender_ratio_tr)
 
     def __parse_type_category(self, tr):
         tds = tr.find_all('td')
@@ -109,6 +111,30 @@ class PokemonSpider:
         catch_rate=catch_rate.lstrip()
         catch_rate=catch_rate.rstrip()
         print("catch_rate: "+catch_rate)
+
+    def __parse_gender_ratio(self, tr):
+        table = tr.find_all('table', class_='roundy bw-1 bgwhite fulltable')[0]
+        td = table.find('td')
+        tds = td.find_all('td')
+
+        no_gender_td = tds[0]
+        unknown_gender_td = tds[1]
+        gender_td = tds[3]
+
+        if 'hide' in no_gender_td:
+            print("is_no_gender: true")
+        elif 'hide' in unknown_gender_td:
+            print("is_unknown_gender: true")
+        else:
+            spans = gender_td.find_all('span')
+            male_span = spans[0]
+            female_span = spans[1]
+            male = male_span.string
+            female = female_span.string
+            male = male[3:]
+            female = female[3:]
+            print("gender_ratio_male: "+male)
+            print("gender_ratio_female: "+female)
 
     def __typeOfTypeCN(self, type):
         if (type == '一般'):
